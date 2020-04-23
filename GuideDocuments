@@ -1,0 +1,100 @@
+Design discussion: 22-03-2020
+-----------------------------
+
+
+1.npm i jest -D
+2.npm i @vue/test-utils vue-jest babel-jest -D
+3.create a Jest config file jest.config.js in the root folder of our project.
+
+////jest.config.js
+
+module.exports = {
+    verbose: true,
+    moduleFileExtensions: [
+        "js",
+        "json",
+        "vue"
+    ],
+    transform: {
+        ".*\\.(vue)$": "vue-jest",
+        "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
+    },
+    collectCoverage: true,
+    collectCoverageFrom: [
+        "src/components/*.{js,vue}",
+        "!**/node_modules/**"
+    ],
+    coverageReporters: [
+        "html",
+        "text-summary"
+    ],
+}
+
+
+4. create a Jest config file .babelrc in the root folder of our project. 
+
+///// .babelrc
+
+
+{
+    "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "modules": "commonjs",
+            "targets": {
+              "node": "current"
+            }
+          }
+        ]
+      ]
+    }
+
+
+
+5. create a .spec.js file inside the /components folder with the same name of the component to easily identify
+
+/// HelloWorld.spec.js
+
+
+import { shallowMount } from '@vue/test-utils';
+import Component from './HelloWorld.vue'; // name of your Vue component
+
+let wrapper;
+
+beforeEach(() => {
+    wrapper = shallowMount(Component, {
+        propsData: {},
+        mocks: {},
+        stubs: {},
+        methods: {},
+    });
+});
+
+afterEach(() => {
+    wrapper.destroy();
+});
+
+describe('Component', () => {
+    test('is a Vue instance', () => {
+        expect(wrapper.isVueInstance).toBeTruthy();
+    });
+});
+
+
+
+
+
+6. remove all contents from babel.config.js
+7. package.json
+
+Add this inside dev dependency 
+
+"devDependencies": {
+    "babel-core": "^7.0.0-bridge.0",
+  },
+
+Then run npm istall
+
+8.run npm test
+
